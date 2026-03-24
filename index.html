@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:#0f172a;color:#e2e8f0;line-height:1.6;padding:20px;max-width:900px;margin:0 auto}
+.slide{background:#1e293b;border-radius:16px;padding:36px 40px;margin-bottom:24px;border:1px solid #334155;position:relative;overflow:hidden}
+.slide::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,#3b82f6,#8b5cf6,#06b6d4)}
+.topic-header{background:linear-gradient(135deg,#1e3a5f,#2d1b69);border:2px solid #3b82f6}
+.topic-header h1{font-size:28px;background:linear-gradient(90deg,#60a5fa,#a78bfa);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:8px}
+.topic-header .topic-num{font-size:13px;color:#94a3b8;text-transform:uppercase;letter-spacing:3px;margin-bottom:4px}
+h2{font-size:22px;color:#60a5fa;margin-bottom:16px}
+h3{font-size:17px;color:#a78bfa;margin:18px 0 10px}
+p{color:#cbd5e1;margin-bottom:12px;font-size:15px}
+.badge{display:inline-block;background:#3b82f620;color:#60a5fa;padding:3px 12px;border-radius:20px;font-size:12px;font-weight:600;border:1px solid #3b82f640;margin-bottom:12px}
+.cover{text-align:center;padding:50px 40px;background:linear-gradient(135deg,#0f172a,#1e1b4b,#0f172a);border:2px solid #3b82f6}
+.cover h1{font-size:36px;background:linear-gradient(90deg,#3b82f6,#8b5cf6,#06b6d4);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:12px}
+.cover .sub{color:#94a3b8;font-size:16px;margin-bottom:24px}
+.exam-info{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:20px}
+.exam-info div{background:#1e293b;padding:16px;border-radius:10px;border:1px solid #334155}
+.exam-info .num{font-size:24px;font-weight:700;color:#60a5fa}
+.exam-info .label{font-size:12px;color:#94a3b8;margin-top:4px}
+pre{background:#0f172a;border:1px solid #334155;border-radius:10px;padding:16px 20px;overflow-x:auto;margin:12px 0;font-size:13.5px;line-height:1.7}
+code{font-family:'Fira Code','Cascadia Code','JetBrains Mono',monospace}
+.kw{color:#c084fc}
+.fn{color:#60a5fa}
+.str{color:#34d399}
+.cm{color:#64748b}
+.tp{color:#fbbf24}
+.num{color:#f472b6}
+.prop{color:#fb923c}
+.compare{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:12px 0}
+.compare>div{background:#0f172a;padding:16px;border-radius:10px;border:1px solid #334155}
+.compare h4{font-size:14px;margin-bottom:8px}
+.good{border-color:#22c55e40}
+.good h4{color:#4ade80}
+.bad{border-color:#ef444440}
+.bad h4{color:#f87171}
+.key-box{background:#3b82f610;border:1px solid #3b82f630;border-radius:10px;padding:14px 18px;margin:10px 0}
+.key-box strong{color:#60a5fa}
+.flow{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:12px 0}
+.flow .step{background:#3b82f620;border:1px solid #3b82f640;padding:8px 16px;border-radius:8px;font-size:13px;color:#93c5fd}
+.flow .arrow{color:#64748b;font-size:18px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:12px 0}
+.grid3>div{background:#0f172a;padding:14px;border-radius:10px;border:1px solid #334155}
+.grid3 h4{color:#a78bfa;font-size:14px;margin-bottom:6px}
+.grid3 p{font-size:13px;margin:0}
+.types{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0}
+.types span{background:#8b5cf620;border:1px solid #8b5cf640;color:#c4b5fd;padding:4px 14px;border-radius:20px;font-size:13px}
+.state-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:12px 0}
+.state-grid>div{background:#0f172a;padding:12px 16px;border-radius:8px;border:1px solid #334155}
+.state-grid .sname{color:#fbbf24;font-weight:700;font-size:14px}
+.state-grid p{font-size:13px;margin:4px 0 0}
+.warn{background:#f59e0b15;border:1px solid #f59e0b40;border-radius:10px;padding:12px 16px;margin:10px 0;color:#fcd34d;font-size:14px}
+.tip{background:#22c55e10;border:1px solid #22c55e40;border-radius:10px;padding:12px 16px;margin:10px 0;color:#86efac;font-size:14px}
+.steps{counter-reset:s;margin:12px 0}
+.steps>div{display:flex;gap:14px;margin-bottom:10px;align-items:flex-start}
+.steps .snum{background:#3b82f6;color:#fff;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0}
+.steps .stxt{font-size:14px;color:#cbd5e1;padding-top:3px}
+.toc{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px}
+.toc a{display:block;background:#1e293b;padding:12px 16px;border-radius:8px;border:1px solid #334155;color:#93c5fd;text-decoration:none;font-size:14px;transition:all .2s}
+.toc a:hover{border-color:#3b82f6;background:#1e3a5f}
+.toc .tnum{color:#64748b;font-size:12px}
+.divider{height:1px;background:#334155;margin:16px 0}
+.list-tile-diagram{background:#0f172a;border:1px solid #334155;border-radius:10px;padding:20px;margin:12px 0;display:flex;align-items:center;gap:16px}
+.lt-leading{width:48px;height:48px;background:#3b82f620;border:1px dashed #3b82f6;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:11px;color:#60a5fa;flex-shrink:0}
+.lt-center{flex:1}
+.lt-title{color:#e2e8f0;font-weight:600;font-size:15px}
+.lt-sub{color:#94a3b8;font-size:13px}
+.lt-trailing{color:#64748b;font-size:20px;flex-shrink:0}
+.lt-labels{display:flex;justify-content:space-between;font-size:11px;color:#64748b;margin-top:8px;padding:0 4px}
+</style>
+</head>
+<body>
+
+<!-- COVER -->
+<div class="slide cover">
+<div class="badge">FINAL EXAM REVIEW</div>
+<h1>Flutter Mobile App Development</h1>
+<p class="sub">Complete Study Guide — All Topics with Code Examples</p>
+<div class="exam-info">
+<div><div class="num">10</div><div class="label">Pages</div></div>
+<div><div class="num">11-14</div><div class="label">Questions</div></div>
+<div><div class="num">5 pts</div><div class="label">Each</div></div>
+<div><div class="num">35-40%</div><div class="label">Of Grade</div></div>
+</div>
+<p style="margin-top:20px;color:#64748b;font-size:13px">Format: Short answer • Writing/Explain • Coding • Widget Tree • Diagram • Fill-in-the-blanks</p>
+</div>
+
+<!-- ============ TOPIC 1 ============ -->
+<div class="slide topic-header">
+<div class="topic-num">Topic 1</div>
+<h1>ListView, ListTile & Master-Detail</h1>
+<p>Building scrollable lists and navigation patterns</p>
+</div>
+
+<!-- ListView Overview -->
+<div class="slide">
+<div class="badge">TOPIC 1</div>
+<h2>Three Types of ListView</h2>
+
+<div class="grid3">
+<div>
+<h4>Simple ListView</h4>
+<p>Fixed children list. Builds ALL items at once. Good for short, known-length lists.</p>
+</div>
+<div>
+<h4>ListView.builder</h4>
+<p>Lazy building — only renders visible items. Best for long/dynamic lists.</p>
+</div>
+<div>
+<h4>ListView.separated</h4>
+<p>Same as builder + separatorBuilder to insert widgets between items.</p>
+</div>
+</div>
+
+<h3>Simple ListView</h3>
+<pre><code><span class="kw">body:</span> <span class="fn">ListView</span>(
+  <span class="prop">children:</span> <span class="kw">const</span> [
+    <span class="fn">ListTile</span>(<span class="prop">title:</span> <span class="fn">Text</span>(<span class="str">'Water Filter'</span>)),
+    <span class="fn">ListTile</span>(<span class="prop">title:</span> <span class="fn">Text</span>(<span class="str">'Sliding Gate'</span>)),
+    <span class="fn">ListTile</span>(<span class="prop">title:</span> <span class="fn">Text</span>(<span class="str">'Computer'</span>)),
+  ],
+)</code></pre>
+</div>
+
+<!-- ListView.builder -->
+<div class="slide">
+<div class="badge">TOPIC 1</div>
+<h2>ListView.builder — Code Example</h2>
+<p>Uses <code>itemCount</code> and <code>itemBuilder</code>. Only builds items currently visible on screen (lazy loading).</p>
+
+<pre><code><span class="kw">final</span> List&lt;<span class="tp">String</span>&gt; products = [<span class="str">'Water Filter'</span>, <span class="str">'Robot Car'</span>, <span class="str">'Jacket'</span>];
+
+<span class="kw">@override</span>
+<span class="tp">Widget</span> <span class="fn">build</span>(<span class="tp">BuildContext</span> context) {
+  <span class="kw">return</span> <span class="fn">Scaffold</span>(
+    <span class="prop">appBar:</span> <span class="fn">AppBar</span>(<span class="prop">title:</span> <span class="fn">Text</span>(<span class="str">'My List Page'</span>)),
+    <span class="prop">body:</span> <span class="fn">ListView.builder</span>(
+      <span class="prop">itemCount:</span> products.length,
+      <span class="prop">itemBuilder:</span> (<span class="tp">BuildContext</span> context, <span class="tp">int</span> index) {
+        <span class="kw">return</span> <span class="fn">ListTile</span>(
+          <span class="prop">title:</span> <span class="fn">Text</span>(products[index]),
+          <span class="prop">onTap:</span> () {
+            <span class="fn">print</span>(<span class="str">'Tapped: ${products[index]}'</span>);
+          },
+        );
+      },
+    ),
+  );
+}</code></pre>
+
+<div class="key-box">
+<strong>Key Point:</strong> <code>itemBuilder</code> receives <code>context</code> and <code>index</code>. Use <code>index</code> to access data from your list.
+</div>
+</div>
+
+<!-- ListView.separated -->
+<div class="slide">
+<div class="badge">TOPIC 1</div>
+<h2>ListView.separated — Code Example</h2>
+<p>Identical to <code>.builder</code> but adds <code>separatorBuilder</code> — insert <strong>any widget</strong> between items.</p>
+
+<pre><code><span class="fn">ListView.separated</span>(
+  <span class="prop">itemCount:</span> products.length,
+  <span class="prop">itemBuilder:</span> (<span class="tp">BuildContext</span> context, <span class="tp">int</span> index) {
+    <span class="kw">return</span> <span class="fn">ListTile</span>(
+      <span class="prop">title:</span> <span class="fn">Text</span>(products[index]),
+    );
+  },
+  <span class="prop">separatorBuilder:</span> (<span class="tp">BuildContext</span> context, <span class="tp">int</span> index) {
+    <span class="kw">return</span> <span class="fn">Divider</span>();  <span class="cm">// Any widget works here!</span>
+  },
+)</code></pre>
+
+<div class="compare">
+<div class="good"><h4>Common Separators</h4><p style="font-size:13px">Divider(), SizedBox(height: 8), Container with color</p></div>
+<div><h4>When to use?</h4><p style="font-size:13px">When you need visual separation between list items (lines, spacing, etc.)</p></div>
+</div>
+</div>
+
+<!-- ListTile -->
+<div class="slide">
+<div class="badge">TOPIC 1</div>
+<h2>ListTile — Properties Breakdown</h2>
+
+<div class="list-tile-diagram">
+<div class="lt-leading">leading</div>
+<div class="lt-center">
+<div class="lt-title">Title (main text)</div>
+<div class="lt-sub">Subtitle (secondary text)</div>
+</div>
+<div class="lt-trailing">›</div>
+</div>
+<div class="lt-labels"><span>← leading</span><span>center (title + subtitle)</span><span>trailing →</span></div>
+
+<pre><code><span class="fn">ListTile</span>(
+  <span class="prop">leading:</span> <span class="fn">Image.network</span>(<span class="str">'https://example.com/img.jpg'</span>),
+  <span class="prop">title:</span> <span class="fn">Text</span>(<span class="str">'Water Filter RO-01'</span>),
+  <span class="prop">subtitle:</span> <span class="fn">Text</span>(<span class="str">'RO filter for home use'</span>),
+  <span class="prop">trailing:</span> <span class="fn">Icon</span>(<span class="tp">Icons</span>.arrow_forward_ios),
+  <span class="prop">onTap:</span> () {
+    <span class="cm">// Navigate to detail page</span>
+  },
+)</code></pre>
+
+<div class="key-box">
+<strong>5 Key Properties:</strong> <code>leading</code> (left widget), <code>title</code> (main text), <code>subtitle</code> (secondary text), <code>trailing</code> (right widget), <code>onTap</code> (tap callback)
+</div>
+</div>
+
+<!-- Master-Detail -->
+<div class="slide">
+<div class="badge">TOPIC 1</div>
+<h2>Master-Detail Pattern</h2>
+<p>Master page shows list → tap item → navigate to Detail page with data.</p>
+
+<div class="flow">
+<div class="step">List Page (Master)</div>
+<div class="arrow">→</div>
+<div class="step">onTap</div>
+<div class="arrow">→</div>
+<div class="step">Navigator.push</div>
+<div class="arrow">→</div>
+<div class="step">Detail Page</div>
+</div>
+
+<h3>Master Page — Navigation on Tap</h3>
+<pre><code><span class="fn">ListView.builder</span>(
+  <span class="prop">itemCount:</span> products.length,
+  <span class="prop">itemBuilder:</span> (context, index) {
+    <span class="kw">return</span> <span class="fn">ListTile</span>(
+      <span class="prop">title:</span> <span class="fn">Text</span>(products[index].title),
+      <span class="prop">subtitle:</span> <span class="fn">Text</span>(products[index].description),
+      <span class="prop">onTap:</span> () {
+        <span class="fn">Navigator.push</span>(
+          context,
+          <span class="fn">MaterialPageRoute</span>(
+            <span class="prop">builder:</span> (context) => <span class="fn">DetailPage</span>(
+              <span class="prop">product:</span> products[index],
+            ),
+          ),
+        );
+      },
+    );
+  },
+)</code></pre>
+
+<h3>Detail Page — Receive Data</h3>
+<pre><code><span class="kw">class</span> <span class="tp">DetailPage</span> <span class="kw">extends</span> <span class="tp">StatelessWidget</span> {
+  <span class="kw">final</span> <span class="tp">Product</span> product;
+  <span class="tp">DetailPage</span>({<span class="kw">required</span> <span class="kw">this</span>.product});
+
+  <span class="kw">@override</span>
+  <span class="tp">Widget</span> <span class="fn">build</span>(<span class="tp">BuildContext</span> context) {
+    <span class="kw">return</span> <span class="fn">Scaffold</span>(
+      <span class="prop">appBar:</span> <span class="fn">AppBar</span>(<span class="prop">title:</span> <span class="fn">Text</span>(<span class="str">'Detail Page'</span>)),
+      <span class="prop">body:</span> <span class="fn">Column</span>(
+        <span class="prop">children:</span> [
+          <span class="fn">Image.network</span>(product.img),
+          <span class="fn">Text</span>(product.title),
+          <span class="fn">Text</span>(product.description),
+          <span class="fn">ElevatedButton</span>(
+            <span class="prop">onPressed:</span> () => <span class="fn">Navigator.pop</span>(context),
+            <span class="prop">child:</span> <span class="fn">Text</span>(<span class="str">'Back'</span>),
+          ),
+        ],
+      ),
+    );
+  }
+}</code></pre>
+</div>
+
+<!-- Data Model -->
+<div class="slide">
+<div class="badge">TOPIC 1</div>
+<h2>Data Model Class (POJO)</h2>
+<p>A Dart class that structures your data. The <code>fromJson</code> factory constructor converts JSON → Object.</p>
+
+<pre><code><span class="kw">class</span> <span class="tp">Product</span> {
+  <span class="kw">final</span> <span class="tp">int</span> id;
+  <span class="kw">final</span> <span class="tp">String</span> title;
+  <span class="kw">final</span> <span class="tp">String</span> description;
+  <span class="kw">final</span> <span class="tp">String</span> img;
+
+  <span class="tp">Product</span>({
+    <span class="kw">required</span> <span class="kw">this</span>.id,
+    <span class="kw">required</span> <span class="kw">this</span>.title,
+    <span class="kw">required</span> <span class="kw">this</span>.description,
+    <span class="kw">required</span> <span class="kw">this</span>.img,
+  });
+
+  <span class="cm">// Factory constructor: JSON Map → Product object</span>
+  <span class="kw">factory</span> <span class="tp">Product</span>.<span class="fn">fromJson</span>(<span class="tp">Map</span>&lt;<span class="tp">String</span>, <span class="tp">dynamic</span>&gt; json) {
+    <span class="kw">return</span> <span class="tp">Product</span>(
+      <span class="prop">id:</span> json[<span class="str">'id'</span>],
+      <span class="prop">title:</span> json[<span class="str">'title'</span>],
+      <span class="prop">description:</span> json[<span class="str">'description'</span>],
+      <span class="prop">img:</span> json[<span class="str">'img'</span>],
+    );
+  }
+}</code></pre>
+
+<div class="key-box">
+<strong>Exam Tip:</strong> You MUST know how to write a data model class with <code>fromJson</code>. This appears in almost every exam as "Given a DB table, write the class."
+</div>
+</div>
+
+<!-- ============ TOPIC 2 ============ -->
+<div class="slide topic-header">
+<div class="topic-num">Topic 2</div>
+<h1>Async Programming & Internet Connection</h1>
+<p>Sync/Async, FutureBuilder, HTTP, JSON</p>
+</div>
+
+<!-- Sync vs Async -->
+<div class="slide">
+<div class="badge">TOPIC 2</div>
+<h2>Synchronous vs Asynchronous</h2>
+
+<div class="compare">
+<div class="bad">
+<h4>Synchronous (Sequential)</h4>
+<p style="font-size:13px">Tasks run one after another.<br>
+Task 1: 20s → Task 2: 7s → Task 3: 10s<br>
+<strong>Total: 37 seconds</strong></p>
+</div>
+<div class="good">
+<h4>Asynchronous (Parallel)</h4>
+<p style="font-size:13px">Tasks run at the same time.<br>
+Task 1: 20s | Task 2: 7s | Task 3: 10s<br>
+<strong>Total: 20 seconds</strong> (longest task)</p>
+</div>
+</div>
+
+<div class="key-box">
+<strong>When to use Async:</strong> Internet loading, File I/O (save/load), Database queries, Sensor interactions — any long-running task.
+</div>
+</div>
+
+<!-- async / await -->
+<div class="slide">
+<div class="badge">TOPIC 2</div>
+<h2>async, await & Future</h2>
+
+<div class="types">
+<span>Future&lt;T&gt; — value available later</span>
+<span>async — marks function as async</span>
+<span>await — pause until Future completes</span>
+</div>
+
+<h3>Without async (wrong order)</h3>
+<pre><code><span class="kw">void</span> <span class="fn">main</span>() {
+  <span class="fn">print</span>(<span class="str">'Start loading..'</span>);
+  <span class="fn">Future.delayed</span>(<span class="fn">Duration</span>(<span class="prop">seconds:</span> <span class="num">3</span>), () {
+    <span class="fn">print</span>(<span class="str">'Data are ready..'</span>);
+  });
+  <span class="fn">print</span>(<span class="str">'End'</span>);
+}
+<span class="cm">// Output: Start loading.. → End → Data are ready..</span></code></pre>
+
+<h3>With async/await (correct order)</h3>
+<pre><code><span class="tp">Future</span>&lt;<span class="tp">String</span>&gt; <span class="fn">fetchData</span>() <span class="kw">async</span> {
+  <span class="kw">await</span> <span class="fn">Future.delayed</span>(<span class="fn">Duration</span>(<span class="prop">seconds:</span> <span class="num">3</span>));
+  <span class="kw">return</span> <span class="str">'Data are ready.'</span>;
+}
+
+<span class="kw">void</span> <span class="fn">main</span>() <span class="kw">async</span> {
+  <span class="fn">print</span>(<span class="str">'Start fetching data..'</span>);
+  <span class="kw">final</span> data = <span class="kw">await</span> <span class="fn">fetchData</span>();
+  <span class="fn">print</span>(data);
+  <span class="fn">print</span>(<span class="str">'End'</span>);
+}
+<span class="cm">// Output: Start fetching data.. → (3s) → Data are ready. → End</span></code></pre>
+</div>
+
+<!-- FutureBuilder -->
+<div class="slide">
+<div class="badge">TOPIC 2</div>
+<h2>FutureBuilder Widget</h2>
+<p>Builds UI based on the state of a <code>Future</code>. Stateful by nature.</p>
+
+<h3>4 Connection States</h3>
+<div class="state-grid">
+<div><div class="sname">ConnectionState.none</div><p>Future is null, uses initialData</p></div>
+<div><div class="sname">ConnectionState.waiting</div><p>Future started, not resolved yet → show loading</p></div>
+<div><div class="sname">ConnectionState.active</div><p>For Streams only — connection is open, data flows</p></div>
+<div><div class="sname">ConnectionState.done</div><p>Future resolved → show data or error</p></div>
+</div>
+
+<h3>Code Template</h3>
+<pre><code><span class="fn">FutureBuilder</span>(
+  <span class="prop">future:</span> <span class="fn">fetchProducts</span>(),
+  <span class="prop">builder:</span> (<span class="tp">BuildContext</span> context, <span class="tp">AsyncSnapshot</span> snapshot) {
+    <span class="kw">if</span> (snapshot.connectionState == <span class="tp">ConnectionState</span>.waiting) {
+      <span class="kw">return</span> <span class="fn">CircularProgressIndicator</span>();
+    }
+    <span class="kw">if</span> (snapshot.hasError) {
+      <span class="kw">return</span> <span class="fn">Text</span>(<span class="str">'Error: ${snapshot.error}'</span>);
+    }
+    <span class="kw">if</span> (snapshot.hasData) {
+      <span class="kw">return</span> <span class="fn">ListView.builder</span>(
+        <span class="prop">itemCount:</span> snapshot.data.length,
+        <span class="prop">itemBuilder:</span> (context, index) {
+          <span class="kw">return</span> <span class="fn">ListTile</span>(
+            <span class="prop">title:</span> <span class="fn">Text</span>(snapshot.data[index].title),
+          );
+        },
+      );
+    }
+    <span class="kw">return</span> <span class="fn">Text</span>(<span class="str">'No data'</span>);
+  },
+)</code></pre>
+</div>
+
+<!-- JSON -->
+<div class="slide">
+<div class="badge">TOPIC 2</div>
+<h2>JSON Structure</h2>
+
+<div class="compare">
+<div>
+<h4 style="color:#fbbf24">JSON Object → Map&lt;String, dynamic&gt;</h4>
+<pre style="margin:8px 0"><code>{
+  <span class="str">"id"</span>: <span class="num">0</span>,
+  <span class="str">"title"</span>: <span class="str">"Water Filter"</span>,
+  <span class="str">"description"</span>: <span class="str">"RO filter"</span>,
+  <span class="str">"img"</span>: <span class="str">"ro02.jpg"</span>
+}</code></pre>
+</div>
+<div>
+<h4 style="color:#fbbf24">JSON Array → List&lt;dynamic&gt;</h4>
+<pre style="margin:8px 0"><code>[
+  { <span class="str">"id"</span>: <span class="num">0</span>, <span class="str">"title"</span>: <span class="str">"Filter"</span> },
+  { <span class="str">"id"</span>: <span class="num">1</span>, <span class="str">"title"</span>: <span class="str">"Robot"</span> },
+  { <span class="str">"id"</span>: <span class="num">2</span>, <span class="str">"title"</span>: <span class="str">"Micro"</span> }
+]</code></pre>
+</div>
+</div>
+
+<h3>Parsing JSON in Dart</h3>
+<pre><code><span class="kw">import</span> <span class="str">'dart:convert'</span>;
+
+<span class="cm">// String → Map or List</span>
+<span class="kw">final</span> decoded = <span class="fn">jsonDecode</span>(response.body);
+
+<span class="cm">// JSON Array → List&lt;Product&gt;</span>
+<span class="tp">List</span>&lt;<span class="tp">Product</span>&gt; products = (decoded <span class="kw">as</span> <span class="tp">List</span>)
+    .<span class="fn">map</span>((json) => <span class="tp">Product</span>.<span class="fn">fromJson</span>(json))
+    .<span class="fn">toList</span>();</code></pre>
+</div>
+
+<!-- HTTP -->
+<div class="slide">
+<div class="badge">TOPIC 2</div>
+<h2>HTTP Request — Complete Flow</h2>
+
+<div class="flow">
+<div class="step">Client (App)</div>
+<div class="arrow">→</div>
+<div class="step">HTTP GET/POST</div>
+<div class="arrow">→</div>
+<div class="step">Server</div>
+<div class="arrow">→</div>
+<div class="step">JSON Response</div>
+</div>
+
+<h3>Setup: pubspec.yaml</h3>
+<pre><code><span class="prop">dependencies:</span>
+  <span class="prop">http:</span> <span class="str">^1.2.2</span></code></pre>
+
+<h3>Android Permission: AndroidManifest.xml</h3>
+<pre><code>&lt;<span class="kw">uses-permission</span> <span class="prop">android:name</span>=<span class="str">"android.permission.INTERNET"</span>/&gt;</code></pre>
+
+<h3>Fetch Function</h3>
+<pre><code><span class="kw">import</span> <span class="str">'package:http/http.dart'</span> <span class="kw">as</span> http;
+<span class="kw">import</span> <span class="str">'dart:convert'</span>;
+
+<span class="tp">Future</span>&lt;<span class="tp">List</span>&lt;<span class="tp">Product</span>&gt;&gt; <span class="fn">fetchProducts</span>() <span class="kw">async</span> {
+  <span class="kw">final</span> response = <span class="kw">await</span> http.<span class="fn">get</span>(
+    <span class="tp">Uri</span>.<span class="fn">parse</span>(<span class="str">'https://example.com/api/products'</span>),
+  );
+
+  <span class="kw">if</span> (response.statusCode == <span class="num">200</span>) {
+    <span class="tp">List</span>&lt;<span class="tp">dynamic</span>&gt; jsonList = <span class="fn">jsonDecode</span>(response.body);
+    <span class="kw">return</span> jsonList.<span class="fn">map</span>((json) => <span class="tp">Product</span>.<span class="fn">fromJson</span>(json)).<span class="fn">toList</span>();
+  } <span class="kw">else</span> {
+    <span class="kw">throw</span> <span class="fn">Exception</span>(<span class="str">'Failed to load products'</span>);
+  }
+}</code></pre>
+</div>
+
+<!-- Full Pattern -->
+<div class="slide">
+<div class="badge">TOPIC 2 — KEY PATTERN</div>
+<h2>Full Pattern: API → ListView → Detail</h2>
+<p>This is the most important pattern. It combines everything.</p>
+
+<div class="flow">
+<div class="step">fetchProducts()</div>
+<div class="arrow">→</div>
+<div class="step">FutureBuilder</div>
+<div class="arrow">→</div>
+<div class="step">ListView.builder</div>
+<div class="arrow">→</div>
+<div class="step">onTap → DetailPage</div>
+</div>
+
+<pre><code><span class="kw">class</span> <span class="tp">MyListPage</span> <span class="kw">extends</span> <span class="tp">StatelessWidget</span> {
+  <span class="kw">@override</span>
+  <span class="tp">Widget</span> <span class="fn">build</span>(<span class="tp">BuildContext</span> context) {
+    <span class="kw">return</span> <span class="fn">Scaffold</span>(
+      <span class="prop">appBar:</span> <span class="fn">AppBar</span>(<span class="prop">title:</span> <span class="fn">Text</span>(<span class="str">'My App'</span>)),
+      <span class="prop">body:</span> <span class="fn">FutureBuilder</span>(
+        <span class="prop">future:</span> <span class="fn">fetchProducts</span>(),
+        <span class="prop">builder:</span> (context, snapshot) {
+          <span class="kw">if</span> (snapshot.connectionState == <span class="tp">ConnectionState</span>.waiting) {
+            <span class="kw">return</span> <span class="fn">Center</span>(<span class="prop">child:</span> <span class="fn">CircularProgressIndicator</span>());
+          }
+          <span class="kw">if</span> (snapshot.hasData) {
+            <span class="kw">return</span> <span class="fn">ListView.builder</span>(
+              <span class="prop">itemCount:</span> snapshot.data!.length,
+              <span class="prop">itemBuilder:</span> (context, index) {
+                <span class="kw">final</span> product = snapshot.data![index];
+                <span class="kw">return</span> <span class="fn">ListTile</span>(
+                  <span class="prop">leading:</span> <span class="fn">Image.network</span>(product.img),
+                  <span class="prop">title:</span> <span class="fn">Text</span>(product.title),
+                  <span class="prop">subtitle:</span> <span class="fn">Text</span>(product.description),
+                  <span class="prop">onTap:</span> () => <span class="fn">Navigator.push</span>(
+                    context,
+                    <span class="fn">MaterialPageRoute</span>(
+                      <span class="prop">builder:</span> (_) => <span class="fn">DetailPage</span>(<span class="prop">product:</span> product),
+                    ),
+                  ),
+                );
+              },
+            );
+          }
+          <span class="kw">return</span> <span class="fn">Text</span>(<span class="str">'Error loading data'</span>);
+        },
+      ),
+    );
+  }
+}</code></pre>
+
+<div class="warn">⚠️ This pattern covers ~70% of what the exam tests. Master this flow!</div>
+</div>
+
+<!-- ============ TOPIC 3 ============ -->
+<div class="slide topic-header">
+<div class="topic-num">Topic 3</div>
+<h1>Data Persistence — SharedPreferences</h1>
+<p>Storing small data locally on the device</p>
+</div>
+
+<!-- SharedPreferences -->
+<div class="slide">
+<div class="badge">TOPIC 3</div>
+<h2>SharedPreferences Overview</h2>
+<p>Lightweight <strong>key-value</strong> store for small data that persists across app launches.</p>
+
+<h3>Supported Data Types</h3>
+<div class="types">
+<span>bool</span>
+<span>int</span>
+<span>double</span>
+<span>String</span>
+<span>List&lt;String&gt;</span>
+</div>
+
+<h3>Write (Save) Data</h3>
+<pre><code><span class="kw">import</span> <span class="str">'package:shared_preferences/shared_preferences.dart'</span>;
+
+<span class="tp">Future</span>&lt;<span class="kw">void</span>&gt; <span class="fn">saveData</span>() <span class="kw">async</span> {
+  <span class="kw">final</span> prefs = <span class="kw">await</span> <span class="tp">SharedPreferences</span>.<span class="fn">getInstance</span>();
+  <span class="kw">await</span> prefs.<span class="fn">setString</span>(<span class="str">'username'</span>, <span class="str">'John'</span>);
+  <span class="kw">await</span> prefs.<span class="fn">setInt</span>(<span class="str">'age'</span>, <span class="num">25</span>);
+  <span class="kw">await</span> prefs.<span class="fn">setBool</span>(<span class="str">'isLoggedIn'</span>, <span class="kw">true</span>);
+  <span class="kw">await</span> prefs.<span class="fn">setDouble</span>(<span class="str">'score'</span>, <span class="num">95.5</span>);
+}</code></pre>
+
+<h3>Read (Load) Data</h3>
+<pre><code><span class="tp">Future</span>&lt;<span class="kw">void</span>&gt; <span class="fn">loadData</span>() <span class="kw">async</span> {
+  <span class="kw">final</span> prefs = <span class="kw">await</span> <span class="tp">SharedPreferences</span>.<span class="fn">getInstance</span>();
+  <span class="tp">String</span>? username = prefs.<span class="fn">getString</span>(<span class="str">'username'</span>);
+  <span class="tp">int</span>? age = prefs.<span class="fn">getInt</span>(<span class="str">'age'</span>);
+  <span class="tp">bool</span>? isLoggedIn = prefs.<span class="fn">getBool</span>(<span class="str">'isLoggedIn'</span>);
+}</code></pre>
+
+<h3>Remove Data</h3>
+<pre><code><span class="kw">await</span> prefs.<span class="fn">remove</span>(<span class="str">'username'</span>);</code></pre>
+</div>
+
+<!-- Auth Flow -->
+<div class="slide">
+<div class="badge">TOPIC 3</div>
+<h2>Authentication Flow with SharedPreferences</h2>
+
+<div class="steps">
+<div><div class="snum">1</div><div class="stxt">User enters <strong>credentials</strong> (username + password)</div></div>
+<div><div class="snum">2</div><div class="stxt">App sends credentials to <strong>Authentication Server</strong></div></div>
+<div><div class="snum">3</div><div class="stxt">Server returns <strong>Access Token</strong> + <strong>Refresh Token</strong></div></div>
+<div><div class="snum">4</div><div class="stxt">App stores tokens in <strong>SharedPreferences</strong></div></div>
+<div><div class="snum">5</div><div class="stxt">For future API calls, attach <strong>access token</strong> in request</div></div>
+<div><div class="snum">6</div><div class="stxt">If access token expires → use <strong>refresh token</strong> to get new one</div></div>
+<div><div class="snum">7</div><div class="stxt">If refresh token also expired → user must <strong>log in again</strong></div></div>
+</div>
+
+<div class="compare">
+<div>
+<h4 style="color:#60a5fa">SharedPreferences</h4>
+<p style="font-size:13px">Simple key-value, NOT encrypted. For settings, flags, non-sensitive tokens.</p>
+</div>
+<div>
+<h4 style="color:#60a5fa">flutter_secure_storage</h4>
+<p style="font-size:13px">Same API but <strong>encrypted</strong>. For passwords, sensitive tokens.</p>
+</div>
+</div>
+</div>
+
+<!-- ============ TOPIC 4 ============ -->
+<div class="slide topic-header">
+<div class="topic-num">Topic 4</div>
+<h1>Publish & Release</h1>
+<p>Preparing and deploying your Flutter app</p>
+</div>
+
+<!-- Publish -->
+<div class="slide">
+<div class="badge">TOPIC 4</div>
+<h2>Preparation & Release Steps</h2>
+
+<h3>Preparation (Both Platforms)</h3>
+<div class="steps">
+<div><div class="snum">1</div><div class="stxt"><strong>Clean project</strong> — Remove unused code, imports, files, images</div></div>
+<div><div class="snum">2</div><div class="stxt"><strong>App Icon</strong> — Create 512×512 or 1024×1024 icon, use <code>icons_launcher</code> package</div></div>
+<div><div class="snum">3</div><div class="stxt"><strong>App name & Package name</strong> — Use <code>package_rename</code> package</div></div>
+<div><div class="snum">4</div><div class="stxt"><strong>Version</strong> — Set <code>versionCode</code> + <code>versionName</code> in <code>pubspec.yaml</code></div></div>
+</div>
+
+<div class="compare">
+<div>
+<h4 style="color:#4ade80">Android Release</h4>
+<p style="font-size:13px">
+• Developer account: ~$25 (one-time)<br>
+• Create digital signature (keystore)<br>
+• Build: <code>flutter build appbundle</code><br>
+• Upload .aab to Google Play Console<br>
+• Fill store listing + submit
+</p>
+</div>
+<div>
+<h4 style="color:#60a5fa">iOS Release</h4>
+<p style="font-size:13px">
+• Developer account: ~$99/year<br>
+• Register Bundle ID at developer.apple.com<br>
+• Upload via Xcode<br>
+• Submit for App Store review
+</p>
+</div>
+</div>
+</div>
+
+<!-- Project Structure -->
+<div class="slide">
+<div class="badge">TOPIC 2 + 1 — BONUS</div>
+<h2>Recommended Project Structure</h2>
+
+<pre><code><span class="prop">lib/</span>
+├── <span class="prop">models/</span>
+│   └── <span class="fn">product.dart</span>          <span class="cm">← Data model class</span>
+├── <span class="prop">services/</span>
+│   └── <span class="fn">http_service.dart</span>     <span class="cm">← API call functions</span>
+├── <span class="fn">detail_page.dart</span>           <span class="cm">← Detail view page</span>
+├── <span class="fn">my_listpage.dart</span>           <span class="cm">← List view (Master)</span>
+└── <span class="fn">main.dart</span>                  <span class="cm">← App entry point</span></code></pre>
+
+<div class="key-box">
+<strong>Why separate files?</strong> Clean code, easy to maintain, follows MVC-like pattern. Exam may ask about project structure.
+</div>
+</div>
+
+<!-- Exam Tips -->
+<div class="slide" style="border:2px solid #f59e0b">
+<div class="badge" style="background:#f59e0b20;color:#fbbf24;border-color:#f59e0b40">EXAM TIPS</div>
+<h2>What to Expect & Key Patterns</h2>
+
+<h3>Exam Format</h3>
+<div class="types">
+<span>Short Answer</span>
+<span>Writing / Explain</span>
+<span>Write Code</span>
+<span>Widget Tree</span>
+<span>Draw Diagram</span>
+<span>Fill-in-the-blanks</span>
+</div>
+
+<h3>Most Likely Questions</h3>
+<div class="steps">
+<div><div class="snum">1</div><div class="stxt">Given a UI screenshot → write the <strong>Widget Tree</strong> and <strong>Code</strong></div></div>
+<div><div class="snum">2</div><div class="stxt">Given a DB table → write <strong>Data Model class</strong> with <code>fromJson</code></div></div>
+<div><div class="snum">3</div><div class="stxt">Given a DB table → design app to <strong>display list</strong> and <strong>view item detail</strong></div></div>
+<div><div class="snum">4</div><div class="stxt"><strong>Fill-in-the-blanks</strong> for FutureBuilder, HTTP fetch, or ListView code</div></div>
+<div><div class="snum">5</div><div class="stxt">Explain <strong>sync vs async</strong>, SharedPreferences types, ConnectionState</div></div>
+</div>
+
+<div class="tip">
+💡 <strong>The #1 Pattern:</strong> Fetch JSON from API → Parse with fromJson → Display in ListView.builder → Navigate to Detail Page. If you can write this from memory, you can handle ~70% of the exam.
+</div>
+
+<div class="warn">
+⚠️ <strong>Don't forget:</strong> AndroidManifest.xml internet permission, pubspec.yaml dependencies, and the <code>await SharedPreferences.getInstance()</code> pattern.
+</div>
+</div>
+
+</body>
+</html>
